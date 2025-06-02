@@ -25,3 +25,8 @@ This generates a WASM build, and nice JS + TS glue files, inside the `/pkg` fold
 1. Go into build folder: `cd pkg`
 1. Create a link to the module: `yarn link`
 1. Go into another JS project and link the module: `yarn link your-wasm-library-name`
+
+# Tips
+
+- [`wasm-bindgen` docs](https://rustwasm.github.io/wasm-bindgen/examples/index.html)
+- [`wasm-pack` tips](https://rustwasm.github.io/docs/book/reference/index.html)
