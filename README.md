@@ -11,8 +11,7 @@ Based on [wasm-pack-template](https://github.com/rustwasm/wasm-pack-template/tre
 
 ## Development
 
-1. Install deps: `cargo`
-1. Write code (or import it into) in `lib.rs`
+Write code (or import it into) in `lib.rs`.
 
 ## Building
 
