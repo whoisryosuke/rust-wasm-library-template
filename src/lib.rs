@@ -1,17 +1,35 @@
-use std::f32::consts::PI;
-
 use wasm_bindgen::prelude::*;
 
+
 #[wasm_bindgen]
-extern "C" {
-    // fn alert(s: &str);
+pub struct BitcrusherModule {
+    bits: usize,
+    phaser: f32,
+    last: f32,
 }
 
 #[wasm_bindgen]
-pub fn greet(greeting: f32) -> f32 {
-    // alert(&format!("Hello {}!", greeting));
-    
-    let sample = (greeting * 440.0 * 2.0 * PI).sin();
+impl BitcrusherModule {
+    pub fn new(bits: usize) -> BitcrusherModule {
+        BitcrusherModule { bits, phaser: 0.0, last: 0.0 }
+    }
 
-    sample
+    pub fn process(&mut self, samples: &[f32], normfreq: f32) -> Vec<f32> {
+        
+        let step = 0.5_f32.powf(self.bits as f32);
+
+        let mut output = Vec::new();
+
+        // Loop over samples and apply bitcrusher effect
+        for sample in samples {
+            self.phaser += normfreq;
+            if self.phaser >= 1.0 {
+                self.phaser -= 1.0;
+                self.last = step * (sample / step + 0.5).floor(); 
+            }
+            output.push(self.last);
+        }
+
+        output
+    }
 }
