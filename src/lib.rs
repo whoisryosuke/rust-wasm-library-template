@@ -1,4 +1,5 @@
 use wasm_bindgen::prelude::*;
+// use web_sys::{console};
 
 
 #[wasm_bindgen]
@@ -14,9 +15,12 @@ impl BitcrusherModule {
         BitcrusherModule { bits, phaser: 0.0, last: 0.0 }
     }
 
-    pub fn process(&mut self, samples: Vec<f32>, normfreq: f32) -> Vec<f32> {
+    pub fn process(&mut self, samples: &js_sys::Float32Array, normfreq: f32) -> js_sys::Float32Array {
 
-        let mut output = samples;
+        // console::log_1(&"Processing in Rust".into());
+
+        let samples_vec: Vec<f32> = samples.to_vec();
+        let mut output = samples_vec; 
         
         let step = 0.5_f32.powf(self.bits as f32);
 
@@ -27,9 +31,15 @@ impl BitcrusherModule {
                 self.phaser -= 1.0;
                 self.last = step * (*sample / step + 0.5).floor(); 
             }
-            *sample = self.last;
+            *sample = self.last.clone();
         }
 
-        output
+        js_sys::Float32Array::from(&output[..])
     }
 }
+
+// Don't forget to add this for panic handling
+// #[wasm_bindgen(start)]
+// pub fn main() {
+//     console_error_panic_hook::set_once();
+// }
